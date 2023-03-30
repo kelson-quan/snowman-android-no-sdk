@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    >
 
     <application
         android:allowBackup="true"
@@ -12,6 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Snowman"
         tools:targetApi="31">
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -19,14 +21,45 @@
             android:theme="@style/Theme.Snowman.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <intent-filter>
+                <!-- If utilizing $deeplink_path please explicitly declare your hosts, or utilize a wildcard(*) -->
+                <data android:scheme="snowman" android:host="open" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+<!--Live app-->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="kelson.app.link" />
+                <!-- example-alternate domain is required for App Links when the Journeys/Web SDK and Deepviews are used inside your website.  -->
+                <data android:scheme="https" android:host="kelson-alternate.app.link" />
+            </intent-filter>
+<!--Test App-->
+<!--            <intent-filter android:autoVerify="true">-->
+<!--                <action android:name="android.intent.action.VIEW" />-->
+<!--                <category android:name="android.intent.category.DEFAULT" />-->
+<!--                <category android:name="android.intent.category.BROWSABLE" />-->
+<!--                <data android:scheme="https" android:host="example.test-app.link" />-->
+<!--                &lt;!&ndash; example-alternate domain is required for App Links when the Journeys/Web SDK and Deepviews are used inside your website.  &ndash;&gt;-->
+<!--                <data android:scheme="https" android:host="example-alternate.test-app.link" />-->
+<!--            </intent-filter>-->
 
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
+        <meta-data android:name="io.branch.sdk.BranchKey" android:value="key_live_gFmdjHDQHYAIBEGzvmwYXeakCyiHiG44" />
+<!--        <meta-data android:name="io.branch.sdk.BranchKey.test" android:value="key_test_hlxrWC5Zx16DkYmWu4AHiimdqugRYMr" />-->
+<!--        <meta-data android:name="io.branch.sdk.TestMode" android:value="false" />     -->
+        <!-- Set to true to use Branch_Test_Key (useful when simulating installs and/or switching between debug and production flavors) -->
+
     </application>
 
 </manifest>

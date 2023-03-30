@@ -23,6 +23,14 @@ import android.widget.Button;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.app.Application;
+
+import io.branch.referral.Branch;
+
+import io.branch.indexing.BranchUniversalObject;
+import io.branch.referral.Branch;
+import io.branch.referral.BranchError;
+import io.branch.referral.util.LinkProperties;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,7 +42,32 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Branch logging for debugging
+        Branch.enableLogging();
 
+        // Branch object initialization
+        Branch.getAutoInstance(this);
+
+        Branch.sessionBuilder(this).withCallback(new Branch.BranchUniversalReferralInitListener() {
+            @Override
+            public void onInitFinished(BranchUniversalObject branchUniversalObject, LinkProperties linkProperties, BranchError error) {
+                if (error != null) {
+                    Log.e("BranchSDK_Tester", "branch init failed. Caused by -" + error.getMessage());
+                } else {
+                    Log.i("BranchSDK_Tester", "branch init complete!");
+                    if (branchUniversalObject != null) {
+                        Log.i("BranchSDK_Tester", "title " + branchUniversalObject.getTitle());
+                        Log.i("BranchSDK_Tester", "CanonicalIdentifier " + branchUniversalObject.getCanonicalIdentifier());
+                        Log.i("BranchSDK_Tester", "metadata " + branchUniversalObject.getContentMetadata().convertToJson());
+                    }
+
+                    if (linkProperties != null) {
+                        Log.i("BranchSDK_Tester", "Channel " + linkProperties.getChannel());
+                        Log.i("BranchSDK_Tester", "control params " + linkProperties.getControlParams());
+                    }
+                }
+            }
+        }).withData(this.getIntent().getData()).init();
 //        binding = ActivityMainBinding.inflate(getLayoutInflater());
 //        setContentView(binding.getRoot());
 //
